@@ -3,22 +3,26 @@ This _python_ application visually shows how different algorithms solve the [sho
 
 ## GUI
 
+<img src="images/gui.png" width=400>
 
+To create a maze, you just have to press your left mouse button and it starts drawing a mouse, according to where your mouse is located. To create a _start_ and a _goal_, press your right mouse button; the first click sets the start point and the second click sets the goal point. In case you want to change the _start_ or _goal_, press them with the right mouse button and press elsewhere in the same way.
+
+The GUI has 4 buttons; _A*_, _Dijkstra_, _D*_, and _Reset_. The _A*_, _Dijkstra_, and _D*_ buttons initiate the A* search, Dijkstra's, and D* search algorithm respectively. The _Reset_ button resets the entire grid and resets everything to it's initial state. 
 
 ## Algorithms
 
-### Depth-first search
+### [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 
-TODO
+<img src="images/dijkstra.png" width=400>
 
-### Dijkstra's algorithm
+> What is the shortest way to travel from Rotterdam to Groningen, in general: from given city to given city. It is the algorithm for the shortest path, which I designed in about twenty minutes. One morning I was shopping in Amsterdam with my young fiancée, and tired, we sat down on the café terrace to drink a cup of coffee and I was just thinking about whether I could do this, and I then designed the algorithm for the shortest path. As I said, it was a twenty-minute invention. In fact, it was published in '59, three years later. The publication is still readable, it is, in fact, quite nice. One of the reasons that it is so nice was that I designed it without pencil and paper. I learned later that one of the advantages of designing without pencil and paper is that you are almost forced to avoid all avoidable complexities. Eventually, that algorithm became to my great amazement, one of the cornerstones of my fame.
 
-Done
+— Edsger Dijkstra, 2001.
 
-### A* search algorithm
+### [A* search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)
 
-TODO
+_TODO_
 
-### D* search algorithm
+### [D* search algorithm](https://en.wikipedia.org/wiki/D*)
 
-TODO
+_TODO_
