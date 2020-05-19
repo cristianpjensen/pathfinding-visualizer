@@ -43,6 +43,7 @@ class Visualizer():
         self.create_button("A*")
         self.create_button("Dijkstra")
         self.create_button("D*")
+        self.create_button("Reset")
 
         self.window.mainloop()
 
@@ -145,6 +146,9 @@ class Visualizer():
             self.worker = self.dijkstra()
         elif algorithm == "D*":
             self.worker = self.d_star()
+        elif algorithm == "Reset":
+            self.reset()
+            return
 
         self.animate()
 
@@ -170,6 +174,15 @@ class Visualizer():
     def d_star(self):
         # TODO
         return
+
+    def reset(self):
+        '''Resets the grid to it's starting point.'''
+        for row_ind, row in enumerate(self.square_types):
+            for col_ind, column in enumerate(row):
+                if column != 0:
+                    self.canvas.itemconfig(
+                        self.squares[row_ind][col_ind], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
+                    self.square_types[row_ind][col_ind] = 0
 
 
 if __name__ == "__main__":
