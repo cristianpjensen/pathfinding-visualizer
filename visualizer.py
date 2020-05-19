@@ -5,11 +5,11 @@ from tkinter import ttk
 class Visualizer():
     def __init__(self):
         self.WIDTH = self.HEIGHT = 1000
-        self.CELLWIDTH = self.CELLHEIGHT = 10
+        self.CELLWIDTH = self.CELLHEIGHT = 50
         self.ROWS = self.COLUMNS = self.WIDTH // self.CELLWIDTH
 
         self.COLOUR_START = "#006a4e"
-        self.COLOUR_GOAL = "green"
+        self.COLOUR_GOAL = "#8d021f"
         self.COLOUR_WALL = "#080808"
         self.COLOUR_FREE = "#f5f5f5"
         self.COLOUR_EXPLORED = "#152238"
@@ -31,7 +31,7 @@ class Visualizer():
         self.window.bind("<Button-1>", self.colour_wall)
         self.window.bind("<B1-Motion>", self.colour_wall)
 
-        self.window.bind("<Button-2>", self.colour_start)
+        self.window.bind("<Button-2>", self.colour_start_goal)
 
         self.window.mainloop()
 
@@ -43,21 +43,39 @@ class Visualizer():
             self.squares[x][y], fill=self.COLOUR_WALL, outline=self.COLOUR_WALL)
         self.square_types[x][y] = 1
 
-    def colour_start(self, event):
+    def colour_start_goal(self, event):
         # If there already is a start, remove it.
+        # for row_ind, row in enumerate(self.square_types):
+        #     for col_ind, column in enumerate(row):
+        #         if column == 2:
+        #             self.square_types[row_ind][col_ind] = 0
+        #             self.canvas.itemconfig(
+        #                 self.squares[row_ind][col_ind], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
+
+        start = False
+        end = False
+
         for row_ind, row in enumerate(self.square_types):
             for col_ind, column in enumerate(row):
                 if column == 2:
-                    self.square_types[row_ind][col_ind] = 0
-                    self.canvas.itemconfig(
-                        self.squares[row_ind][col_ind], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
+                    start = True
+                if column == 3:
+                    end = True
 
         x = event.x // self.CELLWIDTH
         y = event.y // self.CELLHEIGHT
 
-        self.canvas.itemconfig(
-            self.squares[x][y], fill=self.COLOUR_START, outline=self.COLOUR_START)
-        self.square_types[x][y] = 2
+        if start:
+            if end:
+                return
+            else:
+                self.canvas.itemconfig(
+                    self.squares[x][y], fill=self.COLOUR_GOAL, outline=self.COLOUR_GOAL)
+                self.square_types[x][y] = 3
+        else:
+            self.canvas.itemconfig(
+                self.squares[x][y], fill=self.COLOUR_START, outline=self.COLOUR_START)
+            self.square_types[x][y] = 2
 
     def create_grid(self):
         for column in range(self.COLUMNS):
