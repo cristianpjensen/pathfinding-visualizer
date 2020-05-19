@@ -3,7 +3,9 @@ This _python_ application visually shows how different algorithms solve the [sho
 
 ## GUI
 
-<img src="images/gui.png" width=400>
+<p align="center">
+  <img src="images/gui.png" width=400>
+</p>
 
 To create a maze, you just have to press your left mouse button and it starts drawing a mouse, according to where your mouse is located. To create a _start_ and a _goal_, press your right mouse button; the first click sets the start point and the second click sets the goal point. In case you want to change the _start_ or _goal_, press them with the right mouse button and press elsewhere in the same way.
 
@@ -13,7 +15,9 @@ The GUI has 4 buttons; _A*_, _Dijkstra_, _D*_, and _Reset_. The _A*_, _Dijkstra_
 
 ### [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 
-<img src="images/dijkstra.png" width=400>
+<p align="center">
+  <img src="images/dijkstra.png" width=400>
+</p>
 
 For each explored node, Dijkstra's algorithm calculates the path cost to all of the neighbors, which is `current node + edge weight`. In this implementation of Dijkstra's algorithm the weight of each edge equals 1. It repeats exploring neighbours until the goal has been found. When the goal has been found, it will backtrack by going from each neighbour to the node with the lowest path cost, eventually finding back to the start.
 
