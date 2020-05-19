@@ -5,7 +5,7 @@ from tkinter import ttk
 class Visualizer():
     def __init__(self):
         self.WIDTH = self.HEIGHT = 1000
-        self.CELLWIDTH = self.CELLHEIGHT = 50
+        self.CELLWIDTH = self.CELLHEIGHT = 10
         self.ROWS = self.COLUMNS = self.WIDTH // self.CELLWIDTH
 
         self.COLOUR_START = "#006a4e"
@@ -32,9 +32,12 @@ class Visualizer():
 
         self.create_grid()
 
+        self.prev = None
         self.window.bind("<Button-1>", self.colour_wall)
         self.window.bind("<B1-Motion>", self.colour_wall)
 
+        self.start = None
+        self.end = None
         self.window.bind("<Button-2>", self.colour_start_goal)
 
         self.create_button("A*")
@@ -42,49 +45,6 @@ class Visualizer():
         self.create_button("D*")
 
         self.window.mainloop()
-
-    def colour_wall(self, event):
-        '''Colours a wall, based on the x and y values of the mouse.'''
-        x = event.x // self.CELLWIDTH
-        y = event.y // self.CELLHEIGHT
-
-        if x < 0 or y < 0:
-            return
-
-        self.canvas.itemconfig(
-            self.squares[x][y], fill=self.COLOUR_WALL, outline=self.COLOUR_WALL)
-        self.square_types[x][y] = 1
-
-    def colour_start_goal(self, event):
-        '''Colours the start or the end goal, based on the x and y values of the mouse.'''
-
-        start = False
-        end = False
-
-        for row_ind, row in enumerate(self.square_types):
-            for col_ind, column in enumerate(row):
-                if column == 2:
-                    start = True
-                if column == 3:
-                    end = True
-
-        x = event.x // self.CELLWIDTH
-        y = event.y // self.CELLHEIGHT
-
-        if x < 0 or y < 0:
-            return
-
-        if start:
-            if end:
-                return
-            else:
-                self.canvas.itemconfig(
-                    self.squares[x][y], fill=self.COLOUR_GOAL, outline=self.COLOUR_GOAL)
-                self.square_types[x][y] = 3
-        else:
-            self.canvas.itemconfig(
-                self.squares[x][y], fill=self.COLOUR_START, outline=self.COLOUR_START)
-            self.square_types[x][y] = 2
 
     def create_grid(self):
         '''Creates the grid, based on the constants already declared.'''
@@ -108,6 +68,74 @@ class Visualizer():
             self.window, text=algorithm, command=lambda: self.pathfind(
                 algorithm)
         ).pack(in_=self.top, side=LEFT))
+
+    def colour_wall(self, event):
+        '''Colours a wall, based on the x and y values of the mouse.'''
+        x = event.x // self.CELLWIDTH
+        y = event.y // self.CELLHEIGHT
+
+        if (x, y) == self.prev or x < 0 or y < 0:
+            return
+
+        if self.square_types[x][y] == 1:
+            self.canvas.itemconfig(
+                self.squares[x][y], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
+            self.square_types[x][y] = 0
+        else:
+            self.canvas.itemconfig(
+                self.squares[x][y], fill=self.COLOUR_WALL, outline=self.COLOUR_WALL)
+            self.square_types[x][y] = 1
+
+        self.prev = x, y
+
+    def colour_start_goal(self, event):
+        '''Colours the start or the end goal, based on the x and y values of the mouse.'''
+        start = False
+        end = False
+
+        for row_ind, row in enumerate(self.square_types):
+            for col_ind, column in enumerate(row):
+                if column == 2:
+                    start = True
+                if column == 3:
+                    end = True
+
+        x = event.x // self.CELLWIDTH
+        y = event.y // self.CELLHEIGHT
+
+        if x < 0 or y < 0:
+            return
+
+        # If the pressed square is end or start, remove it.
+        if (x, y) == self.start:
+            self.canvas.itemconfig(
+                self.squares[x][y], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
+            self.square_types[x][y] = 0
+
+            self.start = None
+            return
+        elif (x, y) == self.end:
+            self.canvas.itemconfig(
+                self.squares[x][y], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
+            self.square_types[x][y] = 0
+
+            self.end = None
+            return
+
+        # If one of them exists and the other doesn't, place the other.
+        if start:
+            if not end:
+                self.canvas.itemconfig(
+                    self.squares[x][y], fill=self.COLOUR_GOAL, outline=self.COLOUR_GOAL)
+                self.square_types[x][y] = 3
+
+                self.end = x, y
+        else:
+            self.canvas.itemconfig(
+                self.squares[x][y], fill=self.COLOUR_START, outline=self.COLOUR_START)
+            self.square_types[x][y] = 2
+
+            self.start = x, y
 
     def pathfind(self, algorithm):
         '''Picks the pathfinding algorithm used.'''
