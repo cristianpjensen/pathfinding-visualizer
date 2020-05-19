@@ -3,9 +3,11 @@ from tkinter import ttk
 
 
 class Visualizer():
+    '''A GUI visualizer for various pathfinding methods.'''
+
     def __init__(self):
         self.WIDTH = self.HEIGHT = 1000
-        self.CELLWIDTH = self.CELLHEIGHT = 10
+        self.CELLWIDTH = self.CELLHEIGHT = 50
         self.ROWS = self.COLUMNS = self.WIDTH // self.CELLWIDTH
 
         self.COLOUR_START = "#006a4e"
@@ -15,9 +17,16 @@ class Visualizer():
         self.COLOUR_EXPLORED = "#152238"
         self.COLOUR_PATH = "#cd8d00"
 
+        self.SPEED = 100
+
         self.squares = list()
-        self.square_types = list()
+        self.maze = list()
         self.buttons = list()
+
+        # Coordinates.
+        self.start = None
+        self.goal = None
+        self.prev = None
 
         self.window = Tk()
         self.window.title("Pathfinding Visualizer")
@@ -25,33 +34,27 @@ class Visualizer():
         self.top = Frame(self.window)
         self.top.pack(side=TOP)
 
-        self.canvas = Canvas(
-            self.window, width=self.WIDTH, height=self.HEIGHT
-        )
+        self.canvas = Canvas(self.window, width=self.WIDTH, height=self.HEIGHT)
         self.canvas.pack()
 
         self.create_grid()
-
-        self.prev = None
-        self.window.bind("<Button-1>", self.colour_wall)
-        self.window.bind("<B1-Motion>", self.colour_wall)
-
-        self.start = None
-        self.end = None
-        self.window.bind("<Button-2>", self.colour_start_goal)
-
         self.create_button("A*")
         self.create_button("Dijkstra")
         self.create_button("D*")
         self.create_button("Reset")
 
+        self.window.bind("<Button-1>", self.colour_wall)
+        self.window.bind("<B1-Motion>", self.colour_wall)
+        self.window.bind("<Button-2>", self.colour_start_goal)
+
         self.window.mainloop()
 
     def create_grid(self):
         '''Creates the grid, based on the constants already declared.'''
+
         for column in range(self.COLUMNS):
             self.squares.append(list())
-            self.square_types.append(list())
+            self.maze.append(list())
             for row in range(self.ROWS):
                 x1 = column * self.CELLWIDTH
                 y1 = row * self.CELLHEIGHT
@@ -61,10 +64,11 @@ class Visualizer():
                 self.squares[column].append(self.canvas.create_rectangle(
                     x1, y1, x2, y2, fill=self.COLOUR_FREE, outline=self.COLOUR_FREE
                 ))
-                self.square_types[column].append(0)
+                self.maze[column].append(0)
 
     def create_button(self, algorithm):
         '''Creats a button, which is linked to the corresponding algorithm.'''
+
         self.buttons.append(ttk.Button(
             self.window, text=algorithm, command=lambda: self.pathfind(
                 algorithm)
@@ -72,29 +76,34 @@ class Visualizer():
 
     def colour_wall(self, event):
         '''Colours a wall, based on the x and y values of the mouse.'''
+
         x = event.x // self.CELLWIDTH
         y = event.y // self.CELLHEIGHT
 
+        # Return if the square wasn the previously selected.
         if (x, y) == self.prev or x < 0 or y < 0:
             return
 
-        if self.square_types[x][y] == 1:
+        # Inverse them, wall > free, free > wall.
+        if self.maze[x][y] == 1:
             self.canvas.itemconfig(
                 self.squares[x][y], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
-            self.square_types[x][y] = 0
+            self.maze[x][y] = 0
         else:
             self.canvas.itemconfig(
                 self.squares[x][y], fill=self.COLOUR_WALL, outline=self.COLOUR_WALL)
-            self.square_types[x][y] = 1
+            self.maze[x][y] = 1
 
         self.prev = x, y
 
     def colour_start_goal(self, event):
         '''Colours the start or the end goal, based on the x and y values of the mouse.'''
+
         start = False
         end = False
 
-        for row_ind, row in enumerate(self.square_types):
+        # Iterate over every square to check if a start and end already exists.
+        for row_ind, row in enumerate(self.maze):
             for col_ind, column in enumerate(row):
                 if column == 2:
                     start = True
@@ -104,6 +113,7 @@ class Visualizer():
         x = event.x // self.CELLWIDTH
         y = event.y // self.CELLHEIGHT
 
+        # If out of bounds, return.
         if x < 0 or y < 0:
             return
 
@@ -111,35 +121,34 @@ class Visualizer():
         if (x, y) == self.start:
             self.canvas.itemconfig(
                 self.squares[x][y], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
-            self.square_types[x][y] = 0
-
+            self.maze[x][y] = 0
             self.start = None
             return
-        elif (x, y) == self.end:
+        elif (x, y) == self.goal:
             self.canvas.itemconfig(
                 self.squares[x][y], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
-            self.square_types[x][y] = 0
-
-            self.end = None
+            self.maze[x][y] = 0
+            self.goal = None
             return
 
-        # If one of them exists and the other doesn't, place the other.
-        if start:
-            if not end:
+        # Determines if `self.start` or `self.goal` will be placed.
+        if self.start != None:
+            if self.goal == None:
                 self.canvas.itemconfig(
                     self.squares[x][y], fill=self.COLOUR_GOAL, outline=self.COLOUR_GOAL)
-                self.square_types[x][y] = 3
+                self.maze[x][y] = 3
 
-                self.end = x, y
+                self.goal = x, y
         else:
             self.canvas.itemconfig(
                 self.squares[x][y], fill=self.COLOUR_START, outline=self.COLOUR_START)
-            self.square_types[x][y] = 2
+            self.maze[x][y] = 2
 
             self.start = x, y
 
     def pathfind(self, algorithm):
         '''Picks the pathfinding algorithm used.'''
+
         if algorithm == "A*":
             self.worker = self.a_star()
         elif algorithm == "Dijkstra":
@@ -154,6 +163,7 @@ class Visualizer():
 
     def animate(self):
         '''Animates the pathfinding.'''
+
         if self.worker != None:
             try:
                 next(self.worker)
@@ -164,25 +174,85 @@ class Visualizer():
                 self.window.after_cancel(self.animate)
 
     def a_star(self):
+        '''Finds the best path, via the A* search algorithm.'''
+
         # TODO
-        return
+
+        raise NotImplementedError
+
+        self.window.title("A* search algorithm")
 
     def dijkstra(self):
-        # TODO
-        return
+        '''Finds the best path, via Dijkstra's shortest path algorithm.'''
+
+        self.window.title("Dijkstra's algorithm")
+
+        distances = list()
+
+        for row_ind, row in enumerate(self.maze):
+            distances.append(list())
+            for column in range(len(row)):
+                distances[row_ind].append(float("inf"))
+
+        x, y = current_position = self.goal
+
+        distances[x][y] = 0
+
+        neighbours = list()
+
+        while True:
+            for new_position in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                x, y = current_position
+
+                neighbour_position = current_position[0] + \
+                    new_position[0], current_position[1] + new_position[1]
+                x_neighbour, y_neighbour = neighbour_position
+
+                distance = distances[x][y] + 1
+
+                # Continue if outside of bounds.
+                if x_neighbour < 0 or x_neighbour > (self.ROWS - 1) or y_neighbour < 0 or y_neighbour > (self.COLUMNS - 1):
+                    continue
+
+                # Continue if it is a wall.
+                if self.maze[x_neighbour][y_neighbour] == 1:
+                    continue
+
+                # Stop if the start has been found.
+                if (x_neighbour, y_neighbour) == self.start:
+                    return
+
+                # Only assign the new distance, if it is less than the old distance.
+                if distance < distances[x_neighbour][y_neighbour]:
+                    distances[x_neighbour][y_neighbour] = distance
+                    self.canvas.itemconfig(
+                        self.squares[x_neighbour][y_neighbour], fill=self.COLOUR_EXPLORED, outline=self.COLOUR_EXPLORED)
+                    yield
+
+                    neighbours.append((x_neighbour, y_neighbour))
+
+            current_position = neighbours.pop(0)
 
     def d_star(self):
+        '''Finds the best path, via the D* search algorithm.'''
+
         # TODO
-        return
+
+        raise NotImplementedError
+
+        self.window.title("D* search algorithm")
 
     def reset(self):
         '''Resets the grid to it's starting point.'''
-        for row_ind, row in enumerate(self.square_types):
+
+        self.window.title("Pathfinding Visualizer")
+
+        for row_ind, row in enumerate(self.maze):
             for col_ind, column in enumerate(row):
                 if column != 0:
                     self.canvas.itemconfig(
                         self.squares[row_ind][col_ind], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
-                    self.square_types[row_ind][col_ind] = 0
+                    self.maze[row_ind][col_ind] = 0
 
 
 if __name__ == "__main__":
