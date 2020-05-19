@@ -7,7 +7,7 @@ class Visualizer():
 
     def __init__(self):
         self.WIDTH = self.HEIGHT = 1000
-        self.CELLWIDTH = self.CELLHEIGHT = 50
+        self.CELLWIDTH = self.CELLHEIGHT = 10
         self.ROWS = self.COLUMNS = self.WIDTH // self.CELLWIDTH
 
         self.COLOUR_START = "#006a4e"
@@ -17,7 +17,7 @@ class Visualizer():
         self.COLOUR_EXPLORED = "#152238"
         self.COLOUR_PATH = "#cd8d00"
 
-        self.SPEED = 100
+        self.SPEED = 1
 
         self.squares = list()
         self.maze = list()
@@ -98,17 +98,6 @@ class Visualizer():
 
     def colour_start_goal(self, event):
         '''Colours the start or the end goal, based on the x and y values of the mouse.'''
-
-        start = False
-        end = False
-
-        # Iterate over every square to check if a start and end already exists.
-        for row_ind, row in enumerate(self.maze):
-            for col_ind, column in enumerate(row):
-                if column == 2:
-                    start = True
-                if column == 3:
-                    end = True
 
         x = event.x // self.CELLWIDTH
         y = event.y // self.CELLHEIGHT
@@ -194,44 +183,66 @@ class Visualizer():
             for column in range(len(row)):
                 distances[row_ind].append(float("inf"))
 
-        x, y = current_position = self.goal
+        x_parent, y_parent = parent_position = self.start
 
-        distances[x][y] = 0
+        distances[x_parent][y_parent] = 0
 
-        neighbours = list()
+        self.frontier = list()
 
         while True:
-            for new_position in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                x, y = current_position
+            x_parent, y_parent = parent_position
 
-                neighbour_position = current_position[0] + \
-                    new_position[0], current_position[1] + new_position[1]
-                x_neighbour, y_neighbour = neighbour_position
+            for new_position in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
+                position = x_parent + \
+                    new_position[0], y_parent + new_position[1]
+                x, y = position
 
-                distance = distances[x][y] + 1
+                distance = distances[x_parent][y_parent] + 1
 
                 # Continue if outside of bounds.
-                if x_neighbour < 0 or x_neighbour > (self.ROWS - 1) or y_neighbour < 0 or y_neighbour > (self.COLUMNS - 1):
+                if x < 0 or x > (self.ROWS - 1) or y < 0 or y > (self.COLUMNS - 1):
                     continue
 
                 # Continue if it is a wall.
-                if self.maze[x_neighbour][y_neighbour] == 1:
+                if self.maze[x][y] == 1:
                     continue
 
                 # Stop if the start has been found.
-                if (x_neighbour, y_neighbour) == self.start:
-                    return
+                if (x, y) == self.goal:
+                    x_path, y_path = self.goal
+
+                    # Backtrack.
+                    while True:
+                        minimum = float("inf")
+
+                        # Get the neighbour with the least distance from the start.
+                        for child_position in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
+                            x_current, y_current = x_path + \
+                                child_position[0], y_path + child_position[1]
+
+                            if distances[x_current][y_current] < minimum:
+                                minimum = distances[x_current][y_current]
+                                x_min, y_min = x_current, y_current
+
+                            if minimum == 0:
+                                return
+
+                        x_path, y_path = x_min, y_min
+
+                        self.canvas.itemconfig(
+                            self.squares[x_min][y_min], fill=self.COLOUR_PATH, outline=self.COLOUR_PATH)
+                        yield
 
                 # Only assign the new distance, if it is less than the old distance.
-                if distance < distances[x_neighbour][y_neighbour]:
-                    distances[x_neighbour][y_neighbour] = distance
+                if distance < distances[x][y]:
+                    distances[x][y] = distance
                     self.canvas.itemconfig(
-                        self.squares[x_neighbour][y_neighbour], fill=self.COLOUR_EXPLORED, outline=self.COLOUR_EXPLORED)
+                        self.squares[x][y], fill=self.COLOUR_EXPLORED, outline=self.COLOUR_EXPLORED)
                     yield
 
-                    neighbours.append((x_neighbour, y_neighbour))
+                    self.frontier.append((x, y))
 
-            current_position = neighbours.pop(0)
+            parent_position = self.frontier.pop(0)
 
     def d_star(self):
         '''Finds the best path, via the D* search algorithm.'''
@@ -249,10 +260,15 @@ class Visualizer():
 
         for row_ind, row in enumerate(self.maze):
             for col_ind, column in enumerate(row):
-                if column != 0:
-                    self.canvas.itemconfig(
-                        self.squares[row_ind][col_ind], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
-                    self.maze[row_ind][col_ind] = 0
+                self.canvas.itemconfig(
+                    self.squares[row_ind][col_ind], fill=self.COLOUR_FREE, outline=self.COLOUR_FREE)
+                self.maze[row_ind][col_ind] = 0
+
+        # Reset all variables.
+        self.worker = None
+        self.frontier = list()
+        self.start = None
+        self.goal = None
 
 
 if __name__ == "__main__":
