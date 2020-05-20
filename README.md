@@ -15,17 +15,17 @@ The GUI has 4 buttons; _A*_, _Dijkstra_, _D*_, and _Reset_. The _A*_, _Dijkstra_
 
 ### Colours
 
-![Free colour](images/colour_free.png): free;
+* ![Free colour](images/colour_free.png): free;
 
-![Wall colour](images/colour_wall.png): wall;
+* ![Wall colour](images/colour_wall.png): wall;
 
-![Start colour](images/colour_start.png): start;
+* ![Start colour](images/colour_start.png): start;
 
-![Goal colour](images/colour_goal.png): goal;
+* ![Goal colour](images/colour_goal.png): goal;
 
-![Explored colour](images/colour_explored.png): explored;
+* ![Explored colour](images/colour_explored.png): explored;
 
-![Path colour](images/colour_path.png): shortest path.
+* ![Path colour](images/colour_path.png): shortest path.
 
 ## Algorithms
 
