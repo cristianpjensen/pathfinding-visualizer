@@ -9,23 +9,23 @@ This _python_ application visually - using [Tkinter](https://wiki.python.org/moi
 
 ### Manual
 
-To create a maze, you just have to press your left mouse button and it starts drawing a mouse, according to where your mouse is located. To create a _start_ and a _goal_, press your right mouse button; the first click sets the start point and the second click sets the goal point. In case you want to change the _start_ or _goal_, press them with the right mouse button and press elsewhere in the same way.
+To create a maze, you just have to press your left mouse button and it starts drawing walls - to delete: press again - according to where your mouse is located. To create a _start_ and a _goal_, press your right mouse button; the first click sets the start point and the second click sets the goal point. In case you want to change the _start_ or _goal_, press them with the right mouse button and press elsewhere in the same way.
 
 The GUI has 4 buttons; _A*_, _Dijkstra_, _D*_, and _Reset_. The _A*_, _Dijkstra_, and _D*_ buttons initiate the A* search, Dijkstra's, and D* search algorithm respectively. The _Reset_ button resets the entire grid and resets everything to it's initial state. 
 
 ### Colours
 
-![Free colour](images/colour_free.png): free;
+* ![Free colour](images/colour_free.png): free;
 
-![Wall colour](images/colour_wall.png): wall;
+* ![Wall colour](images/colour_wall.png): wall;
 
-![Start colour](images/colour_start.png): start;
+* ![Start colour](images/colour_start.png): start;
 
-![Goal colour](images/colour_goal.png): goal;
+* ![Goal colour](images/colour_goal.png): goal;
 
-![Explored colour](images/colour_explored.png): explored;
+* ![Explored colour](images/colour_explored.png): explored;
 
-![Path colour](images/colour_path.png): shortest path.
+* ![Path colour](images/colour_path.png): shortest path.
 
 ## Algorithms
 
