@@ -43,7 +43,13 @@ For each explored node, Dijkstra's algorithm calculates the path cost to all of 
 
 ### [A* search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)
 
-_TODO_
+<p align="center">
+  <img src="images/a_star.png" width=400>
+</p>
+
+The A* search algorithm is a pathfinding algorithm, which improved upon Dijkstra's algorithm. Instead of just going off the distance from the start, the A* algorithm also takes heuristics into account. The heuristics for the A* algorithm can be calculated in various ways, however for this project the optimal method was the [Manhattan distance](https://xlinux.nist.gov/dads/HTML/manhattanDistance.html). The formula for each explored node is `f(n) = g(n) + h(n)`, where `g(n)` is the distance travelled until that point, and `h(n)` is the heuristic for that node. The algorithm keeps picking the lowest `f(n)`, until the goal has been reached.
+
+A* was created as part of [the Shakey project](https://en.wikipedia.org/wiki/Shakey_the_robot), which had the aim of building a mobile robot that could plan its own actions.
 
 ### [D* search algorithm](https://en.wikipedia.org/wiki/D*)
 
