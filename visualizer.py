@@ -46,6 +46,7 @@ class Visualizer():
         self.window.bind("<Button-1>", self.colour_wall)
         self.window.bind("<B1-Motion>", self.colour_wall)
         self.window.bind("<Button-2>", self.colour_start_goal)
+        self.window.bind("<Button-3>", self.colour_start_goal)
 
         self.window.mainloop()
 
