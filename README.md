@@ -9,7 +9,7 @@ This _python_ application visually - using [Tkinter](https://wiki.python.org/moi
 
 ### Manual
 
-To create a maze, you just have to press your left mouse button and it starts drawing a mouse, according to where your mouse is located. To create a _start_ and a _goal_, press your right mouse button; the first click sets the start point and the second click sets the goal point. In case you want to change the _start_ or _goal_, press them with the right mouse button and press elsewhere in the same way.
+To create a maze, you just have to press your left mouse button and it starts drawing walls - to delete: press again - according to where your mouse is located. To create a _start_ and a _goal_, press your right mouse button; the first click sets the start point and the second click sets the goal point. In case you want to change the _start_ or _goal_, press them with the right mouse button and press elsewhere in the same way.
 
 The GUI has 4 buttons; _A*_, _Dijkstra_, _D*_, and _Reset_. The _A*_, _Dijkstra_, and _D*_ buttons initiate the A* search, Dijkstra's, and D* search algorithm respectively. The _Reset_ button resets the entire grid and resets everything to it's initial state. 
 
@@ -43,7 +43,13 @@ For each explored node, Dijkstra's algorithm calculates the path cost to all of 
 
 ### [A* search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)
 
-_TODO_
+<p align="center">
+  <img src="images/a_star.png" width=400>
+</p>
+
+The A* search algorithm is a pathfinding algorithm, which improved upon Dijkstra's algorithm. Instead of just going off the distance from the start, the A* algorithm also takes heuristics into account. The heuristics for the A* algorithm can be calculated in various ways, however for this project the optimal method was the [Manhattan distance](https://xlinux.nist.gov/dads/HTML/manhattanDistance.html). The formula for each explored node is `f(n) = g(n) + h(n)`, where `g(n)` is the distance travelled until that point, and `h(n)` is the heuristic for that node. The algorithm keeps picking the lowest `f(n)`, until the goal has been reached.
+
+A* was created as part of [the Shakey project](https://en.wikipedia.org/wiki/Shakey_the_robot), which had the aim of building a mobile robot that could plan its own actions.
 
 ### [D* search algorithm](https://en.wikipedia.org/wiki/D*)
 
