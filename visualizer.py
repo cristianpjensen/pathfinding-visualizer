@@ -17,7 +17,7 @@ class Visualizer():
         self.COLOUR_EXPLORED = "#152238"
         self.COLOUR_PATH = "#cd8d00"
 
-        self.SPEED = 1
+        self.SPEED = 10
 
         self.grid = list()
         self.maze = list()
@@ -293,7 +293,7 @@ class Visualizer():
 
                 # Ignore if outside of bounds, or a wall.
                 if (x_nb < 0 or x_nb > (self.ROWS - 1) or y_nb < 0 or y_nb > (self.COLUMNS - 1)
-                        or self.maze[x][y] == 1):
+                        or self.maze[x_nb][y_nb] == 1):
                     continue
 
                 # Start has been found.
