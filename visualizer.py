@@ -40,7 +40,6 @@ class Visualizer():
         self.create_grid()
         self.create_button("Dijkstra")
         self.create_button("A*")
-        self.create_button("D*")
         self.create_button("Reset")
 
         self.window.bind("<Button-1>", self.colour_wall)
@@ -145,8 +144,6 @@ class Visualizer():
             self.worker = self.a_star()
         elif algorithm == "Dijkstra":
             self.worker = self.dijkstra()
-        elif algorithm == "D*":
-            self.worker = self.d_star()
         elif algorithm == "Reset":
             self.reset()
             return
@@ -331,15 +328,6 @@ class Visualizer():
                     frontier.append(nb_pos)
 
             pos = frontier.pop(0)
-
-    def d_star(self):
-        """Finds the best path, via the D* search algorithm."""
-
-        self.window.title("D* search algorithm")
-
-        # TODO
-
-        raise NotImplementedError
 
     def reset(self):
         """Resets the grid to it's starting point."""
