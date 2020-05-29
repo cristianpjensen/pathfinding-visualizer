@@ -40,7 +40,7 @@ class Visualizer():
         self.create_grid()
         self.create_button("Dijkstra")
         self.create_button("A*")
-        self.create_button("D*")
+        self.create_button("DFS")
         self.create_button("Reset")
 
         self.window.bind("<Button-1>", self.colour_wall)
@@ -145,8 +145,8 @@ class Visualizer():
             self.worker = self.a_star()
         elif algorithm == "Dijkstra":
             self.worker = self.dijkstra()
-        elif algorithm == "D*":
-            self.worker = self.d_star()
+        elif algorithm == "DFS":
+            self.worker = self.dfs()
         elif algorithm == "Reset":
             self.reset()
             return
@@ -332,14 +332,80 @@ class Visualizer():
 
             pos = frontier.pop(0)
 
-    def d_star(self):
-        """Finds the best path, via the D* search algorithm."""
+    def dfs(self):
+        """Finds the best path, via the depth-first search search algorithm."""
 
-        self.window.title("D* search algorithm")
+        self.window.title("Depth-first search")
 
-        # TODO
+        order = list()
+        frontier = list()
+        closed_list = list()
 
-        raise NotImplementedError
+        # Create a map of the distances for each position.
+        for row_ind, row in enumerate(self.maze):
+            order.append(list())
+            for column in range(len(row)):
+                order[row_ind].append(float("inf"))
+
+        pos = self.start
+        order[pos[0]][pos[1]] = 0
+
+        while True:
+            x, y = pos
+
+            for change in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
+                nb_pos = x + change[0], y + change[1]
+                x_nb, y_nb = nb_pos
+
+                nb_order = order[x][y] + 1
+
+                # Ignore if outside of bounds, or a wall.
+                if (x_nb < 0 or x_nb > (self.ROWS - 1) or y_nb < 0 or y_nb > (self.COLUMNS - 1)
+                        or self.maze[x_nb][y_nb] == 1):
+                    continue
+
+                # Start has been found.
+                if nb_pos == self.goal:
+                    x_path, y_path = self.goal
+                    prev = order[x_path][y_path]
+
+                    # Backtrack.
+                    while True:
+
+                        # Get the neighbour with the least distance from the start.
+                        for change in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
+                            x, y = x_path + change[0], y_path + change[1]
+
+                            if x < 0 or x > (self.ROWS - 1) or y < 0 or y > (self.COLUMNS - 1):
+                                continue
+
+                            if (x, y) not in closed_list:
+                                continue
+
+                            if order[x][y] == (prev - 1):
+                                print(order[x][y])
+                                x_path, y_path = x, y
+
+                            if order[x][y] == 0:
+                                return
+
+                        prev = order[x_path][y_path]
+
+                        self.canvas.itemconfig(
+                            self.grid[x_path][y_path], fill=self.COLOUR_PATH, outline=self.COLOUR_PATH)
+                        yield
+
+                # Only assign the new distance, if it is less than the old distance.
+                if nb_order < order[x_nb][y_nb]:
+                    order[x_nb][y_nb] = nb_order
+                    self.canvas.itemconfig(
+                        self.grid[x_nb][y_nb], fill=self.COLOUR_EXPLORED, outline=self.COLOUR_EXPLORED)
+                    yield
+
+                    frontier.insert(0, nb_pos)
+
+            pos = frontier.pop(0)
+            closed_list.append(pos)
 
     def reset(self):
         """Resets the grid to it's starting point."""
