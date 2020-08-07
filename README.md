@@ -1,5 +1,6 @@
-# Pathfinding Visualizer
-This _python_ application visually - using [Tkinter](https://wiki.python.org/moin/TkInter) - shows how different algorithms solve the [shortest path problem](https://en.wikipedia.org/wiki/Shortest_path_problem), which is the problem of finding a path between two vertices (or nodes) in a graph such that the sum of the weights of its constituent edges is minimized. These algorithms are visualized in a grid (instead of a graph), where the weight of each edge is equal to 1.
+# Pathfinding Visualiser
+
+This _python_ application visually - using [Tkinter](https://wiki.python.org/moin/TkInter) - shows how different algorithms solve the [shortest path problem](https://en.wikipedia.org/wiki/Shortest_path_problem), which is the problem of finding a path between two vertices (or nodes) in a graph such that the sum of the weights of its constituent edges is minimised. These algorithms are visualised in a grid (instead of a graph), where the weight of each edge is equal to 1.
 
 ## GUI
 
@@ -11,21 +12,21 @@ This _python_ application visually - using [Tkinter](https://wiki.python.org/moi
 
 To create a maze, you just have to press your left mouse button and it starts drawing walls - to delete: press again - according to where your mouse is located. To create a _start_ and a _goal_, press your right mouse button; the first click sets the start point and the second click sets the goal point. In case you want to change the _start_ or _goal_, press them with the right mouse button and press elsewhere in the same way.
 
-The GUI has 3 buttons; _A*_, _Dijkstra_, and _Reset_. The _A*_, and _Dijkstra_ buttons initiate the A* search, and Dijkstra's algorithm respectively. The _Reset_ button resets the entire grid and resets everything to it's initial state. 
+The GUI has 3 buttons; _A\*_, _Dijkstra_, and _Reset_. The _A\*_, and _Dijkstra_ buttons initiate the A\* search, and Dijkstra's algorithm respectively. The _Reset_ button resets the entire grid and resets everything to it's initial state.
 
 ### Colours
 
-* ![Free colour](images/colour_free.png): free;
+- ![Free colour](images/colour_free.png): free;
 
-* ![Wall colour](images/colour_wall.png): wall;
+- ![Wall colour](images/colour_wall.png): wall;
 
-* ![Start colour](images/colour_start.png): start;
+- ![Start colour](images/colour_start.png): start;
 
-* ![Goal colour](images/colour_goal.png): goal;
+- ![Goal colour](images/colour_goal.png): goal;
 
-* ![Explored colour](images/colour_explored.png): explored;
+- ![Explored colour](images/colour_explored.png): explored;
 
-* ![Path colour](images/colour_path.png): shortest path.
+- ![Path colour](images/colour_path.png): shortest path.
 
 ## Algorithms
 
@@ -41,12 +42,12 @@ For each explored node, Dijkstra's algorithm calculates the path cost to all of 
 
 — Edsger Dijkstra, 2001.
 
-### [A* search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)
+### [A\* search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)
 
 <p align="center">
   <img src="images/a_star.png" width=400>
 </p>
 
-The A* search algorithm is a pathfinding algorithm, which improved upon Dijkstra's algorithm. Instead of just going off the distance from the start, the A* algorithm also takes heuristics into account. The heuristics for the A* algorithm can be calculated in various ways, however for this project the optimal method was the [Manhattan distance](https://xlinux.nist.gov/dads/HTML/manhattanDistance.html). The formula for each explored node is `f(n) = g(n) + h(n)`, where `g(n)` is the distance travelled until that point, and `h(n)` is the heuristic for that node. The algorithm keeps picking the lowest `f(n)`, until the goal has been reached.
+The A* search algorithm is a pathfinding algorithm, which improved upon Dijkstra's algorithm. Instead of just going off the distance from the start, the A* algorithm also takes heuristics into account. The heuristics for the A\* algorithm can be calculated in various ways, however for this project the optimal method was the [Manhattan distance](https://xlinux.nist.gov/dads/HTML/manhattanDistance.html). The formula for each explored node is `f(n) = g(n) + h(n)`, where `g(n)` is the distance travelled until that point, and `h(n)` is the heuristic for that node. The algorithm keeps picking the lowest `f(n)`, until the goal has been reached.
 
-A* was created as part of [the Shakey project](https://en.wikipedia.org/wiki/Shakey_the_robot), which had the aim of building a mobile robot that could plan its own actions.
+A\* was created as part of [the Shakey project](https://en.wikipedia.org/wiki/Shakey_the_robot), which had the aim of building a mobile robot that could plan its own actions.
