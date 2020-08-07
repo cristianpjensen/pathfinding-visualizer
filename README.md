@@ -33,7 +33,7 @@ The GUI has 3 buttons; _A\*_, _Dijkstra_, and _Reset_. The _A\*_, and _Dijkstra_
 ### [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 
 <p align="center">
-  <img src="images/dijkstra.png" width=400>
+  <img src="https://media.giphy.com/media/H7ZDmheGCVcwuzls5x/giphy.gif" width=400>
 </p>
 
 For each explored node, Dijkstra's algorithm calculates the path cost to all of the neighbors, which is `current node + edge weight`. In this implementation of Dijkstra's algorithm the weight of each edge equals 1. It repeats exploring neighbours until the goal has been found. When the goal has been found, it will backtrack by going from each neighbour to the node with the lowest path cost, eventually finding back to the start.
@@ -45,7 +45,7 @@ For each explored node, Dijkstra's algorithm calculates the path cost to all of 
 ### [A\* search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm)
 
 <p align="center">
-  <img src="images/a_star.png" width=400>
+  <img src="https://media.giphy.com/media/XyVdtACO8u5tKvupe1/giphy.gif" width=400>
 </p>
 
 The A* search algorithm is a pathfinding algorithm, which improved upon Dijkstra's algorithm. Instead of just going off the distance from the start, the A* algorithm also takes heuristics into account. The heuristics for the A\* algorithm can be calculated in various ways, however for this project the optimal method was the [Manhattan distance](https://xlinux.nist.gov/dads/HTML/manhattanDistance.html). The formula for each explored node is `f(n) = g(n) + h(n)`, where `g(n)` is the distance travelled until that point, and `h(n)` is the heuristic for that node. The algorithm keeps picking the lowest `f(n)`, until the goal has been reached.
