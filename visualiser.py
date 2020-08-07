@@ -2,8 +2,8 @@ from tkinter import *
 from tkinter import ttk
 
 
-class Visualizer():
-    """A GUI visualizer for various pathfinding methods."""
+class Visualiser():
+    """A GUI visualiser for various pathfinding methods."""
 
     def __init__(self):
         self.WIDTH = self.HEIGHT = 1000
@@ -29,7 +29,7 @@ class Visualizer():
         self.prev = None
 
         self.window = Tk()
-        self.window.title("Pathfinding Visualizer")
+        self.window.title("Pathfinding Visualiser")
 
         self.top = Frame(self.window)
         self.top.pack(side=TOP)
@@ -332,7 +332,7 @@ class Visualizer():
     def reset(self):
         """Resets the grid to it's starting point."""
 
-        self.window.title("Pathfinding Visualizer")
+        self.window.title("Pathfinding Visualiser")
 
         for row_ind, row in enumerate(self.maze):
             for col_ind, column in enumerate(row):
@@ -347,4 +347,4 @@ class Visualizer():
 
 
 if __name__ == "__main__":
-    Visualizer()
+    Visualiser()
